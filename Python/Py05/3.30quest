@@ -1,0 +1,147 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyPH8x4F5nfqhcyCMEInkMcU",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/dksgustn155-cmd/AIFFEL_quest_eng/blob/main/Python/Py05/3.30quest\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import random #랜덤계좌번호를 생성하기위한 코드\n",
+        "\n",
+        "class Account: #클래스\n",
+        "    account_count = 0\n",
+        "\n",
+        "    def __init__(self, name, balance):\n",
+        "        self.bank = \"NH은행\"\n",
+        "        self.name = name\n",
+        "        self.balance = balance\n",
+        "\n",
+        "        # 계좌번호 생성 랜덤한 계좌번호\n",
+        "        num1 = str(random.randint(100, 999))\n",
+        "        num2 = str(random.randint(10, 99))\n",
+        "        num3 = str(random.randint(100000, 999999))\n",
+        "        self.account_number = f\"{num1}-{num2}-{num3}\"\n",
+        "\n",
+        "        # 입금 횟수\n",
+        "        self.deposit_count = 0\n",
+        "\n",
+        "        #입출금 기록\n",
+        "        self.deposit_list = []\n",
+        "        self.withdraw_list = []\n",
+        "\n",
+        "        Account.account_count += 1\n",
+        "\n",
+        "    @classmethod                 #이부분 AI도움을 조금 받아서 제작하여서 공부하겠습니다.\n",
+        "    def get_account_num(cls):\n",
+        "        print(cls.account_count)\n",
+        "\n",
+        "    def deposit(self, amount):\n",
+        "        if amount >= 1:\n",
+        "            self.balance += amount\n",
+        "            self.deposit_count += 1\n",
+        "            self.deposit_list.append(amount)\n",
+        "\n",
+        "            # 5번마다 이자 1%\n",
+        "            if self.deposit_count % 5 == 0:\n",
+        "                interest = self.balance * 0.01\n",
+        "                self.balance += interest              #여기까지\n",
+        "        else:\n",
+        "            print(\"입금은 최소 1원 이상 가능합니다.\")\n",
+        "\n",
+        "    # 출금메서드 작성\n",
+        "    def withdraw(self, amount):\n",
+        "        if amount <= self.balance:\n",
+        "            self.balance -= amount\n",
+        "            self.withdraw_list.append(amount)\n",
+        "        else:\n",
+        "            print(\"잔액이 부족합니다.\")\n",
+        "\n",
+        "    def display_info(self):\n",
+        "        print(f\"은행이름: {self.bank}\")\n",
+        "        print(f\"예금주: {self.name}\")\n",
+        "        print(f\"계좌번호: {self.account_number}\")\n",
+        "        print(f\"잔고: {format(int(self.balance), ',')}원\")\n",
+        "\n",
+        "    def deposit_history(self):\n",
+        "        print(\"입금 내역:\", self.deposit_list)\n",
+        "\n",
+        "    def withdraw_history(self):\n",
+        "        print(\"출금 내역:\", self.withdraw_list)\n",
+        "\n",
+        "# 여러객체 생성\n",
+        "accounts = []\n",
+        "accounts.append(Account(\"박00\", 500000))\n",
+        "accounts.append(Account(\"안현수\", 71200000))\n",
+        "accounts.append(Account(\"김OO\", 234000000))\n",
+        "\n",
+        "#100만원 이상 고객 출력\n",
+        "for acc in accounts:\n",
+        "    if acc.balance >= 1000000:\n",
+        "        acc.display_info()\n",
+        "        print(\"---------------\")\n",
+        "\n",
+        "accounts[0].deposit(1000)\n",
+        "accounts[0].deposit(2000)\n",
+        "accounts[0].deposit(3000)\n",
+        "accounts[0].deposit(4000)\n",
+        "accounts[0].deposit(5000)  # 여기서 이자 발생\n",
+        "\n",
+        "accounts[0].withdraw(2000)\n",
+        "#기록남기기\n",
+        "accounts[0].deposit_history()\n",
+        "accounts[0].withdraw_history() #AI도움을 조금 받았습니다"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "Bfc57ysWwbOl",
+        "outputId": "aa797008-a5ea-41b6-94d1-015907649a97"
+      },
+      "execution_count": 30,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "은행이름: NH은행\n",
+            "예금주: 안현수\n",
+            "계좌번호: 681-53-758057\n",
+            "잔고: 71,200,000원\n",
+            "---------------\n",
+            "은행이름: NH은행\n",
+            "예금주: 김OO\n",
+            "계좌번호: 876-74-936466\n",
+            "잔고: 234,000,000원\n",
+            "---------------\n",
+            "입금 내역: [1000, 2000, 3000, 4000, 5000]\n",
+            "출금 내역: [2000]\n"
+          ]
+        }
+      ]
+    }
+  ]
+}
